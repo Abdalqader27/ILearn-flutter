@@ -1,0 +1,102 @@
+name: ilearn
+description: A new Flutter application.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^0.18.0
+  flutter_icons: ^0.3.1
+  custom_navigation_bar: ^0.3.0
+  font_awesome_flutter: ^8.8.1
+  connectivity: ^0.4.8+6
+  animated_text_kit: ^2.0.0
+  bottom_navy_bar: ^5.3.2
+  image_sequence_animator: ^1.0.6
+  spring_button: ^1.0.13
+  flutter_page_transition: ^0.1.0
+  flare_flutter: any
+  url_launcher: any
+  simple_animations: any
+  flutter_staggered_animations: "^0.1.2"
+  http: ^0.12.0+2
+  dio: any
+  toast: ^0.1.5
+  provider: ^3.0.0+1
+  scoped_model: ^1.0.1
+  liquid_pull_to_refresh: ^2.0.0
+  scroll_to_index: ^1.0.6
+  flutter_colorpicker: any
+  flutter_cached_pdfview: ^0.1.7
+  flutter_windowmanager: ^0.0.2
+  # firebase_analytics: ^2.0.2+1
+  #  flutter_easyrefresh: ^2.1.1
+  #  foldable_sidebar: ^1.0.0
+  delayed_display: ^1.0.3
+  lottie: ^0.6.0
+  tuple: ^1.0.3
+  shared_preferences: ^0.5.10
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+  awesome_dialog: ^1.2.0
+  percent_indicator: ^2.1.1
+  google_fonts: ^1.1.0
+  sleek_circular_slider: any
+  quiver: any
+  get_it: any
+  charts_flutter: ^0.9.0
+  box2d_flame: any
+  flip_card: ^0.4.4
+  line_awesome_flutter: ^1.0.1
+  flutter_screenutil: ^1.0.2
+  animated_theme_switcher: ^1.0.5
+  flutter_youtube_view: ^1.1.9
+  worm_indicator: 0.2.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  assets:
+    - SvgFiles/
+    - assets/
+    - lotti_files/
+    - assets/images/
+    - assets/icons/
+    - assets/design_course/
+
+  fonts:
+    - family: sst-arabic
+      fonts:
+        - asset: fonts/sst-arabic-bold.ttf
+        - asset: fonts/sst-arabic-light.ttf
+        - asset: fonts/sst-arabic-medium.ttf
+        - asset: fonts/sst-arabic-roman.ttf
