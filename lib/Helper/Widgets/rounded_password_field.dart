@@ -13,22 +13,25 @@ class RoundedPasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFieldContainer(
-      child: TextField(
-        obscureText: true,
-        onChanged: onChanged,
-        cursorColor: kPrimaryColor,
-        decoration: InputDecoration(
-          hintText: type==0?"كلمة السر ":"‘إعادة كتابة كلمة السر",
-          icon: Icon(
-            Icons.lock,
-            color: kPrimaryColor,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: TextFieldContainer(
+        child: TextField(
+          obscureText: true,
+          onChanged: onChanged,
+          cursorColor: kPrimaryColor,
+          decoration: InputDecoration(
+            hintText: type==0?"كلمة السر ":"‘إعادة كتابة كلمة السر",
+            icon: Icon(
+              Icons.lock,
+              color: kPrimaryColor,
+            ),
+            suffixIcon: Icon(
+              Icons.visibility,
+              color: kPrimaryColor,
+            ),
+            border: InputBorder.none,
           ),
-          suffixIcon: Icon(
-            Icons.visibility,
-            color: kPrimaryColor,
-          ),
-          border: InputBorder.none,
         ),
       ),
     );

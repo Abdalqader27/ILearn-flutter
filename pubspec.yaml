@@ -71,6 +71,7 @@ dependencies:
   animated_theme_switcher: ^1.0.5
   flutter_youtube_view: ^1.1.9
   worm_indicator: 0.2.1
+  cupertino_date_textbox: ^1.0.0+3
 dev_dependencies:
   flutter_test:
     sdk: flutter
