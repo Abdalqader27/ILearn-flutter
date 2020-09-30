@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ilearn/Helper/Themes/appTheme.dart';
 import 'package:ilearn/Helper/Widgets/custom_drawer/drawer_user_controller.dart';
 import 'package:ilearn/Helper/Widgets/custom_drawer/home_drawer.dart';
+import 'package:ilearn/RxDart/DrawerNavigation.dart';
 import 'package:ilearn/View/DrawerView/About.dart';
 import 'package:ilearn/View/DrawerView/FeedbackScreen.dart';
 import 'package:ilearn/View/DrawerView/HelpScreen.dart';
@@ -15,7 +16,6 @@ class NavigationHomeScreen extends StatefulWidget {
 }
 
 class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
-  Widget screenView;
   DrawerIndex drawerIndex;
   AnimationController sliderAnimationController;
   final myApp = MyApp();
@@ -27,49 +27,66 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = myApp;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    sliderAnimationController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => (drawerIndex ==  DrawerIndex.HOME),
+      onWillPop: () async {
+        if (drawerIndex != DrawerIndex.HOME) drawerNavigation.changeObject(DrawerIndex.HOME);
+        return true;
+      },
       child: Container(
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
           body: DrawerUserController(
             screenIndex: drawerIndex,
-            drawerWidth: MediaQuery.of(context).size.width * 0.75,
+            drawerWidth: 200,
             animationController: (AnimationController animationController) {
               sliderAnimationController = animationController;
             },
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
-              changeIndex(drawerIndexdata);
+            onDrawerCall: (DrawerIndex drawerIndexData) {
+              if (drawerIndex != drawerIndexData) {
+                drawerIndex = drawerIndexData;
+                setState(() {
+                  drawerNavigation.changeObject(drawerIndexData);
+                });
+              }
             },
-            screenView: screenView,
+            screenView: StreamBuilder(
+              stream: drawerNavigation.observableObject,
+              builder: (context, snapshot) {
+                if (snapshot.data == null) return myApp;
+                switch (snapshot.data) {
+                  case DrawerIndex.HOME:
+                    return myApp;
+                  case DrawerIndex.Help:
+                    return helpScreen;
+                  case DrawerIndex.FeedBack:
+                    return feedbackScreen;
+                  case DrawerIndex.Invite:
+                    return inviteFriend;
+                  case DrawerIndex.About:
+                    return about;
+                  default:
+                    {
+                      return myApp;
+                    }
+                }
+                //do in your way......
+              },
+            ),
           ),
         ),
       ),
     );
-  }
-
-  void changeIndex(DrawerIndex drawerIndexdata) {
-    if (drawerIndex != drawerIndexdata) {
-      drawerIndex = drawerIndexdata;
-      if (drawerIndex == DrawerIndex.HOME) {
-        setState(() => screenView = myApp);
-      } else if (drawerIndex == DrawerIndex.Help) {
-        setState(() => screenView = helpScreen);
-      } else if (drawerIndex == DrawerIndex.FeedBack) {
-        setState(() => screenView = feedbackScreen);
-      } else if (drawerIndex == DrawerIndex.Invite) {
-        setState(() => screenView = inviteFriend);
-      } else if (drawerIndex == DrawerIndex.About) {
-        setState(() => screenView = about);
-      } else {
-        //do in your way......
-      }
-    }
   }
 }

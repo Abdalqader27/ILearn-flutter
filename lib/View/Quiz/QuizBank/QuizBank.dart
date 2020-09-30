@@ -5,8 +5,6 @@ import 'package:flutter_page_transition/page_transition_type.dart';
 import 'package:ilearn/Helper/Widgets/itemQuizBank.dart';
 import 'package:ilearn/Model/ItemQuizBank.dart';
 import 'package:ilearn/Model/itemMaterialQuizBank.dart';
-import 'package:ilearn/View/Home/category_list_view.dart';
-import 'package:ilearn/View/Home/models/category.dart';
 import 'package:ilearn/View/Quiz/quiz_play.dart';
 
 class QuizBank extends StatefulWidget {

@@ -392,6 +392,8 @@ class _FolderBotPageState extends State<FolderBotPage> {
       itemBuilder: (context, index) {
         return Card(
           elevation: 0,
+          color: Colors.white.withOpacity(0.3),
+
           margin: EdgeInsets.all(0),
           shape: index == 0
               ? RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)))

@@ -20,6 +20,9 @@ class TitleText extends StatelessWidget {
     return Text(text,
         style: TextStyle(
 
-            fontSize: fontSize, fontWeight: fontWeight, color: color,fontFamily: 'sst-arabic'));
+
+            fontSize: fontSize, fontWeight: fontWeight, color: color,fontFamily: 'sst-arabic'),softWrap: true,
+
+    );
   }
 }

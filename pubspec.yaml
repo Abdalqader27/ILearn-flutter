@@ -72,6 +72,8 @@ dependencies:
   flutter_youtube_view: ^1.1.9
   worm_indicator: 0.2.1
   cupertino_date_textbox: ^1.0.0+3
+  rxdart: any
+  youtube_player_flutter: ^7.0.0+7
 dev_dependencies:
   flutter_test:
     sdk: flutter

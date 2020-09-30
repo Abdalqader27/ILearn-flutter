@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ilearn/Helper/Themes/appTheme.dart';
 import 'package:ilearn/Model/ItemQuizBank.dart';
-import 'package:ilearn/View/Home/design_course_app_theme.dart';
 
 class ItemQuizBankWidget extends StatelessWidget {
   const ItemQuizBankWidget({Key key, this.itemQuizBank, this.animationController, this.animation, this.callback}) : super(key: key);

@@ -23,7 +23,7 @@ class _RRectanglePainterColor extends BoxPainter {
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
-    final Offset customOffset = offset + Offset(0, cfg.size.height - weight);
+    final Offset customOffset = offset + Offset(cfg.size.width/3, cfg.size.height - weight);
 
     //Custom Rectangle
     Rect myRect = customOffset & Size(width, weight);

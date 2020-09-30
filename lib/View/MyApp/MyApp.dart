@@ -9,11 +9,14 @@ import 'package:flutter_page_transition/page_transition_type.dart';
 import 'package:ilearn/Helper/Constants/constantsColors.dart';
 import 'package:ilearn/Helper/Resourse/OnBackPressed.dart';
 import 'package:ilearn/Helper/Resourse/Resource.dart';
+import 'package:ilearn/RxDart/MyAppBottomNavigation.dart';
 import 'package:ilearn/View/Register/Signup/components/background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../NotificationScreen.dart';
+
+
 
 class MyApp extends StatefulWidget {
   @override
@@ -21,10 +24,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    // ]);
     /// call provider to get all your functions
     /// use this widget for on Back Pressed
     return WillPopScope(
@@ -61,7 +65,7 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   /// we see appbar and his action
                   AppBar(
-                    backgroundColor: Colors.white.withOpacity(.1),
+                    backgroundColor: Colors.white.withOpacity(.01),
                     elevation: 0,
                     actions: [
                       Padding(
@@ -81,7 +85,13 @@ class _MyAppState extends State<MyApp> {
                   ),
 
                   /// for Fragment pages using $_currentIndex to select widget
-                  Expanded(child: myWidgets[currentIndex]),
+                  Expanded(
+                      child: StreamBuilder<int>(
+                          stream: myAppBottomNavigation.observableObject,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) return Container();
+                            return myWidgets[snapshot.data];
+                          })),
                 ],
               ),
             ],
@@ -94,41 +104,47 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget buildCustomIconDesign() => CustomNavigationBar(
-        iconSize: 30.0,
-        selectedColor: kPrimaryColor,
-        strokeColor: Color(0x300c18fb),
-        unSelectedColor: Colors.grey[600],
-        backgroundColor: Colors.white,
-        items: [
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData('home'),
-          ),
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData('folderopen'),
-          ),
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData("playcircleo"),
-          ),
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData('book'),
-          ),
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData("barchart"),
-          ),
-          CustomNavigationBarItem(
-            icon: AntDesign.getIconData("user"),
-          ),
-        ],
-        currentIndex: currentIndex,
-        onTap: (index) {
-          print(currentIndex);
+  Widget buildCustomIconDesign() => StreamBuilder<int>(
+    stream: myAppBottomNavigation.observableObject,
+    builder: (context, snapshot) {
+      if(snapshot.data==null)return Container();
+      return CustomNavigationBar(
+            iconSize: 30.0,
+            selectedColor: kPrimaryColor,
+            strokeColor: Color(0x300c18fb),
+            unSelectedColor: Colors.grey[600],
+            backgroundColor: Colors.white,
+            items: [
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData('home'),
+              ),
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData('folderopen'),
+              ),
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData("playcircleo"),
+              ),
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData('book'),
+              ),
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData("barchart"),
+              ),
+              CustomNavigationBarItem(
+                icon: AntDesign.getIconData("user"),
+              ),
+            ],
+            currentIndex: snapshot.data,
+            onTap: (index) {
 
-          setState(() {
-            currentIndex = index;
-          });
-        },
-      );
+              myAppBottomNavigation.changeObject(index);
+              // setState(() {
+              //   currentIndex = index;
+              // });
+            },
+          );
+    }
+  );
 
   Widget bubblesWidget() => Positioned(top: 0, left: 0, right: 0, child: Opacity(opacity: .2, child: Lottie.asset("lotti_files/25765-bubble-sticky.json")));
 }
