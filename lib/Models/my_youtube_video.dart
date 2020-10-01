@@ -19,13 +19,13 @@ class MyYoutubeVideo {
   int subjectId;
   String subjectName;
   int classId;
-  List<VideosList> videosList;
+  List<MyVideosList> videosList;
 
   MyYoutubeVideo copyWith({
     int subjectId,
     String subjectName,
     int classId,
-    List<VideosList> videosList,
+    List<MyVideosList> videosList,
   }) =>
       MyYoutubeVideo(
         subjectId: subjectId ?? this.subjectId,
@@ -38,7 +38,7 @@ class MyYoutubeVideo {
     subjectId: json["subjectId"] == null ? null : json["subjectId"],
     subjectName: json["subjectName"] == null ? null : json["subjectName"],
     classId: json["classId"] == null ? null : json["classId"],
-    videosList: json["videosList"] == null ? null : List<VideosList>.from(json["videosList"].map((x) => VideosList.fromJson(x))),
+    videosList: json["videosList"] == null ? null : List<MyVideosList>.from(json["videosList"].map((x) => MyVideosList.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -49,8 +49,8 @@ class MyYoutubeVideo {
   };
 }
 
-class VideosList {
-  VideosList({
+class MyVideosList {
+  MyVideosList({
     this.id,
     this.title,
     this.description,
@@ -66,7 +66,7 @@ class VideosList {
   int classSubjectId;
   dynamic classSubject;
 
-  VideosList copyWith({
+  MyVideosList copyWith({
     int id,
     String title,
     String description,
@@ -74,7 +74,7 @@ class VideosList {
     int classSubjectId,
     dynamic classSubject,
   }) =>
-      VideosList(
+      MyVideosList(
         id: id ?? this.id,
         title: title ?? this.title,
         description: description ?? this.description,
@@ -83,7 +83,7 @@ class VideosList {
         classSubject: classSubject ?? this.classSubject,
       );
 
-  factory VideosList.fromJson(Map<String, dynamic> json) => VideosList(
+  factory MyVideosList.fromJson(Map<String, dynamic> json) => MyVideosList(
     id: json["id"] == null ? null : json["id"],
     title: json["title"] == null ? null : json["title"],
     description: json["description"] == null ? null : json["description"],

@@ -37,7 +37,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (drawerIndex != DrawerIndex.HOME) drawerNavigation.changeObject(DrawerIndex.HOME);
-        return true;
+        return false;
       },
       child: Container(
         child: Scaffold(

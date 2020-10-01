@@ -75,6 +75,7 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
                                       physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) => myItem(
+                                        parentIndex: parentIndex,
                                             index: index,
                                             title: myVideoList[parentIndex].videosList[index].title,
                                             classSubject: myVideoList[parentIndex].videosList[index].classSubject,
@@ -114,7 +115,7 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
         width: double.infinity,
       );
 
-  Widget myItem({index, path, classSubject, title, description}) => AnimationConfiguration.staggeredList(
+  Widget myItem({index, path, classSubject, title, description,parentIndex}) => AnimationConfiguration.staggeredList(
         position: index,
         duration: const Duration(milliseconds: 1500),
         child: SlideAnimation(
@@ -129,7 +130,10 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
               borderRadius: BorderRadius.circular(10.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context, PageTransition(type: PageTransitionType.fadeIn, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: YoutubeDetails()));
+                  Navigator.push(context, PageTransition(type: PageTransitionType.fadeIn, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: YoutubeDetails(
+
+                    youtubeFiles:myVideoList[parentIndex].videosList[index] ,
+                  )));
                 },
                 child: Stack(
                   children: <Widget>[

@@ -7,6 +7,7 @@ import 'package:ilearn/Helper/Widgets/background/primary_background.dart';
 import 'package:ilearn/Helper/Widgets/custom_items/loading.dart';
 import 'package:ilearn/Models/my_news.dart';
 import 'package:ilearn/Models/popularbook_model.dart';
+import 'package:intl/intl.dart'as intl;
 
 import 'news_screen_details.dart';
 
@@ -62,18 +63,19 @@ class _NewsScreenState extends State<NewsScreen> {
                                   margin: EdgeInsets.only(bottom: 19),
                                   height: 81,
                                   width: MediaQuery.of(context).size.width - 50,
-                                  color: kBackgroundColor,
                                   child: Row(
                                     children: <Widget>[
-                                      Container(
-                                        height: 81,
-                                        width: 62,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            image: DecorationImage(
-                                              image: AssetImage(BASE + snapshot.data[index].imageUrl),
-                                            ),
-                                            color: kMainColor),
+                                      ClipRRect(
+                                        child: Container(
+                                          height: 81,
+                                          width: 62,
+                                          child: Image.network(
+                                            "$BASE" + snapshot.data[index].imageUrl,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: kMainColor),
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
                                       ),
                                       SizedBox(
                                         width: 21,
@@ -83,22 +85,27 @@ class _NewsScreenState extends State<NewsScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            populars[index].title,
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: kBlackColor),
+                                            "${snapshot.data[index].title}",
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlackColor),
                                           ),
                                           SizedBox(
                                             height: 5,
                                           ),
                                           Text(
-                                            populars[index].author,
-                                            style: GoogleFonts.openSans(fontSize: 10, fontWeight: FontWeight.w400, color: kGreyColor),
+                                            "${snapshot.data[index].description}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 5,
                                           ),
                                           Text(
-                                            '\$' + populars[index].price,
-                                            style: GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600, color: kBlackColor),
+                                            intl.DateFormat("dd-M-yyyy  / HH:mm").format(snapshot.data[index].date),
+                                            style: TextStyle(fontWeight: FontWeight.bold, color: kGreyColor),
                                           )
                                         ],
                                       )

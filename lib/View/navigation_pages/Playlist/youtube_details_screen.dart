@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ilearn/Models/my_youtube_video.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YoutubeDetails extends StatefulWidget {
+   final youtubeFiles;
+
+   YoutubeDetails({Key key, this.youtubeFiles}) : super(key: key);
   @override
   _YoutubeDetailsState createState() => _YoutubeDetailsState();
 }
@@ -19,7 +23,7 @@ class _YoutubeDetailsState extends State<YoutubeDetails> {
               progressIndicatorColor: Colors.blueAccent,
               controller: YoutubePlayerController(
 
-                initialVideoId: '${YoutubePlayer.convertUrlToId("https://www.youtube.com/watch?v=Qwdyx9kAPlU")}',
+                initialVideoId: '${YoutubePlayer.convertUrlToId(widget.youtubeFiles.path)}',
               ),
             ),
           ),

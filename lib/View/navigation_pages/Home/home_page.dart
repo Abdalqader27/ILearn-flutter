@@ -4,13 +4,17 @@ import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Helper/Constants/constants_dimen.dart';
 import 'package:ilearn/Helper/Constants/constants_fonts.dart';
 import 'package:ilearn/Helper/Constants/constants_keys.dart';
 import 'package:ilearn/Helper/Constants/constants_objects.dart';
 import 'package:ilearn/Helper/Widgets/components/custom_tab_indicator.dart';
 import 'package:ilearn/Helper/Widgets/custom_items/loading.dart';
+import 'package:ilearn/Models/my_lasts_documents.dart';
 import 'package:ilearn/Models/my_lasts_youtube_video.dart';
 import 'package:ilearn/Models/my_news.dart';
+import 'package:ilearn/Models/my_youtube_video.dart';
+import 'package:ilearn/View/navigation_pages/BotFiles/pdf_reader_screen.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/View/navigation_pages/Playlist/youtube_details_screen.dart';
 
 import 'package:lottie/lottie.dart';
@@ -21,6 +25,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'Search/search_screen.dart';
 import 'news/news_screen.dart';
 import 'news/news_screen_details.dart';
+import 'package:intl/intl.dart' as intl;
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,10 +36,12 @@ class _HomePageState extends State<HomePage> {
   int indexTabBar = 0;
   Future myVideosFuture;
   Future myNewsFuture;
+  Future myLastsDocumentFuture;
 
   @override
   void initState() {
-    myVideosFuture = api.getLastsYoutubeVideos(6);
+    myLastsDocumentFuture = api.getMyLastsDocuments(kItems);
+    myVideosFuture = api.getLastsYoutubeVideos(kItems);
     myNewsFuture = api.getMyNews();
     super.initState();
   }
@@ -156,98 +163,100 @@ class _HomePageState extends State<HomePage> {
                       builder: (context, snapshot) {
                         if (snapshot.data == 0)
                           return Container(
-                            child: FutureBuilder(
-                                future: null,
+                            child: FutureBuilder<List<MyLastsDocuments>>(
+                                future: myLastsDocumentFuture,
                                 builder: (context, snapshot) {
-                                  if (snapshot.data == null) {
-                                    return Lottie.asset(
-                                      'lotti_files/29435-random-things.json',
-                                    );
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 5.0),
-                                    child: Center(
-                                      child: AnimationLimiter(
-                                        child: ListView.builder(
-                                            padding: EdgeInsets.only(left: 5, right: 6, bottom: 0),
-                                            itemCount: snapshot.data.length,
-                                            physics: BouncingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              return AnimationConfiguration.staggeredList(
-                                                position: index,
-                                                duration: const Duration(milliseconds: 1500),
-                                                child: SlideAnimation(
-                                                  horizontalOffset: 20,
-                                                  child: Card(
-                                                    color: Colors.transparent,
-                                                    elevation: 0,
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(right: 0, top: 5),
-                                                      width: 105,
-                                                      child: Column(
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                                            child: Text(
-                                                              'فيزياء الاشعاعية الاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعيةالاشعاعية ',
-                                                              softWrap: true,
-                                                              overflow: TextOverflow.ellipsis,
-                                                              maxLines: 1,
-                                                              style: TextStyle(color: Colors.grey),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Stack(
-                                                              children: <Widget>[
-                                                                Positioned(
-                                                                  left: 0,
-                                                                  right: 0,
-                                                                  child: Container(
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
+                                  if (snapshot.data == null)
+                                    return Loading();
+                                  else {
+                                    MyLastsDocuments myObject = snapshot.data.firstWhere((element) => element.classId == 3);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Center(
+                                        child: AnimationLimiter(
+                                          child: ListView.builder(
+                                              padding: EdgeInsets.only(left: 5, right: 6, bottom: 0),
+                                              itemCount: myObject.filesList.length,
+                                              physics: BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfReaderPage(myObject.filesList[index])));
+                                                  },
+                                                  child: AnimationConfiguration.staggeredList(
+                                                    position: index,
+                                                    duration: const Duration(milliseconds: 1500),
+                                                    child: SlideAnimation(
+                                                      horizontalOffset: 20,
+                                                      child: Card(
+                                                        color: Colors.transparent,
+                                                        elevation: 0,
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                                        child: Container(
+                                                          margin: EdgeInsets.only(right: 0, top: 5),
+                                                          width: 105,
+                                                          child: Column(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                                                                child: Text(
+                                                                  '${myObject.filesList[index].fileName}',
+                                                                  softWrap: true,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: TextStyle(color: Colors.grey),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Stack(
+                                                                  children: <Widget>[
+                                                                    Positioned(
+                                                                      left: 0,
+                                                                      right: 0,
                                                                       child: Container(
-                                                                        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16.0)), color: Colors.grey[400].withOpacity(.1)
-//                            boxShadow: <BoxShadow>[
-//                              BoxShadow(color: DesignCourseAppTheme.grey.withOpacity(0.1), offset: const Offset(0.0, 0.0), blurRadius: 6.0),
-//                            ],
-                                                                            ),
-                                                                        child: ClipRRect(
-                                                                          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                                                                          child: AspectRatio(
-                                                                              aspectRatio: 0.8,
-                                                                              child: Column(
-                                                                                children: <Widget>[
-                                                                                  Expanded(
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.all(0.0),
-                                                                                      child: SvgPicture.asset(
-                                                                                        "SvgFiles/pdf3.svg",
-                                                                                        width: 60,
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
+                                                                          child: Container(
+                                                                            decoration:
+                                                                                BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16.0)), color: Colors.grey[400].withOpacity(.1)),
+                                                                            child: ClipRRect(
+                                                                              borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                                                              child: AspectRatio(
+                                                                                  aspectRatio: 0.8,
+                                                                                  child: Column(
+                                                                                    children: <Widget>[
+                                                                                      Expanded(
+                                                                                        child: Padding(
+                                                                                          padding: const EdgeInsets.all(0.0),
+                                                                                          child: SvgPicture.asset(
+                                                                                            "SvgFiles/pdf3.svg",
+                                                                                            width: 60,
+                                                                                          ),
+                                                                                        ),
                                                                                       ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              )),
+                                                                                    ],
+                                                                                  )),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ),
+                                                                  ],
                                                                 ),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            }),
+                                                );
+                                              }),
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 }),
                           );
                         else
@@ -276,113 +285,7 @@ class _HomePageState extends State<HomePage> {
                                                     verticalOffset: 40.0,
                                                     child: Row(
                                                       children: [
-                                                        Container(
-                                                          width: 230,
-                                                          margin: EdgeInsets.only(right: 10),
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: ClipRRect(
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                            child: GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    PageTransition(
-                                                                        type: PageTransitionType.fadeIn, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: YoutubeDetails()));
-                                                              },
-                                                              child: Stack(
-                                                                children: <Widget>[
-                                                                  Positioned(
-                                                                    top: -25,
-                                                                    bottom: 0,
-                                                                    right: 0,
-                                                                    left: 0,
-                                                                    child: YoutubePlayer(
-                                                                      progressIndicatorColor: Colors.blueAccent,
-                                                                      controller: YoutubePlayerController(
-                                                                        flags: YoutubePlayerFlags(
-                                                                            enableCaption: false,
-                                                                            autoPlay: false,
-                                                                            hideControls: true,
-                                                                            mute: true,
-                                                                            disableDragSeek: true,
-                                                                            controlsVisibleAtStart: false),
-                                                                        initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Positioned(
-                                                                    top: 0,
-                                                                    bottom: 0,
-                                                                    right: 0,
-                                                                    left: 0,
-                                                                    child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: new BorderRadius.all(
-                                                                            Radius.circular(10.0),
-                                                                          ),
-                                                                          gradient: LinearGradient(
-                                                                              colors: [Colors.black, Colors.transparent, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                                                                      child: Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                                                        children: <Widget>[
-                                                                          Padding(
-                                                                            padding: EdgeInsets.only(left: 7),
-                                                                            child: Chip(
-                                                                              backgroundColor: Colors.green[100],
-                                                                              label: Text("${myObject.videosList[index].classSubject}",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    color: Colors.green,
-                                                                                  )),
-                                                                              padding: EdgeInsets.all(7),
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            margin: EdgeInsets.only(bottom: 10, left: 15, right: 15),
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: <Widget>[
-                                                                                Container(
-                                                                                  width: 230,
-                                                                                  child: Text(
-                                                                                    "${myObject.videosList[index].title}  ",
-                                                                                    style: TextStyle(
-                                                                                      fontSize: 17,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      color: Colors.white,
-                                                                                    ),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                    maxLines: 2,
-                                                                                  ),
-                                                                                ),
-                                                                                Container(
-                                                                                  width: 230,
-                                                                                  child: Text(
-                                                                                    "${myObject.videosList[index].description} ",
-                                                                                    style: TextStyle(
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      color: Colors.white,
-                                                                                    ),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                    maxLines: 2,
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
+                                                        myFirstItem(index, myObject),
                                                         Padding(
                                                           padding: const EdgeInsets.all(18.0),
                                                           child: Center(
@@ -417,115 +320,7 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ),
                                                 );
-                                              return AnimationConfiguration.staggeredList(
-                                                position: index,
-                                                duration: const Duration(milliseconds: 1500),
-                                                child: SlideAnimation(
-                                                  horizontalOffset: 40.0,
-                                                  child: Container(
-                                                    width: 230,
-                                                    margin: EdgeInsets.only(right: 10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              PageTransition(
-                                                                  type: PageTransitionType.fadeIn, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: YoutubeDetails()));
-                                                        },
-                                                        child: Stack(
-                                                          children: <Widget>[
-                                                            Positioned(
-                                                              top: -25,
-                                                              bottom: 0,
-                                                              right: 0,
-                                                              left: 0,
-                                                              child: YoutubePlayer(
-                                                                progressIndicatorColor: Colors.blueAccent,
-                                                                controller: YoutubePlayerController(
-                                                                  flags: YoutubePlayerFlags(
-                                                                      enableCaption: false, autoPlay: false, hideControls: true, mute: true, disableDragSeek: true, controlsVisibleAtStart: false),
-                                                                  initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Positioned(
-                                                              top: 0,
-                                                              bottom: 0,
-                                                              right: 0,
-                                                              left: 0,
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius: new BorderRadius.all(
-                                                                      Radius.circular(10.0),
-                                                                    ),
-                                                                    gradient: LinearGradient(
-                                                                        colors: [Colors.black, Colors.transparent, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                                                                child: Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                                  children: <Widget>[
-                                                                    Padding(
-                                                                      padding: EdgeInsets.only(left: 7),
-                                                                      child: Chip(
-                                                                        backgroundColor: Colors.green[100],
-                                                                        label: Text("${myObject.videosList[index].classSubject}",
-                                                                            style: TextStyle(
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              color: Colors.green,
-                                                                            )),
-                                                                        padding: EdgeInsets.all(7),
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      margin: EdgeInsets.only(bottom: 10, left: 15, right: 15),
-                                                                      child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        children: <Widget>[
-                                                                          Container(
-                                                                            width: 230,
-                                                                            child: Text(
-                                                                              "${myObject.videosList[index].title}  ",
-                                                                              style: TextStyle(
-                                                                                fontSize: 17,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              maxLines: 2,
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            width: 230,
-                                                                            child: Text(
-                                                                              "${myObject.videosList[index].description} ",
-                                                                              style: TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              maxLines: 2,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
+                                              return lastItemVideos(index: index, myObject: myObject);
                                             }),
                                       ),
                                     );
@@ -541,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'الاخبار  ',
+                        'أخر الاخبار ',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: kBlackColor),
                       ),
                       GestureDetector(
@@ -596,17 +391,19 @@ class _HomePageState extends State<HomePage> {
                                   margin: EdgeInsets.only(bottom: 19),
                                   height: 81,
                                   width: MediaQuery.of(context).size.width - 50,
-                                  color: kBackgroundColor,
                                   child: Row(
                                     children: <Widget>[
-                                      Container(
-                                        height: 81,
-                                        width: 62,
-                                        child: Image.network(
-                                          "$BASE" + snapshot.data[index].imageUrl,
-                                          fit: BoxFit.fitHeight,
+                                      ClipRRect(
+                                        child: Container(
+                                          height: 81,
+                                          width: 62,
+                                          child: Image.network(
+                                            "$BASE" + snapshot.data[index].imageUrl,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: kMainColor),
                                         ),
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: kMainColor),
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
                                       ),
                                       SizedBox(
                                         width: 21,
@@ -616,22 +413,27 @@ class _HomePageState extends State<HomePage> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            " ${snapshot.data[index].title}",
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: kBlackColor),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "   ${snapshot.data[index].className}",
-                                            style: GoogleFonts.openSans(fontSize: 10, fontWeight: FontWeight.w400, color: kGreyColor),
+                                            "${snapshot.data[index].title}",
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlackColor),
                                           ),
                                           SizedBox(
                                             height: 5,
                                           ),
                                           Text(
                                             "${snapshot.data[index].description}",
-                                            style: GoogleFonts.openSans(fontSize: 14, fontWeight: FontWeight.w600, color: kBlackColor),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            intl.DateFormat("dd-M-yyyy  / HH:mm").format(snapshot.data[index].date),
+                                            style: TextStyle(fontWeight: FontWeight.bold, color: kGreyColor),
                                           )
                                         ],
                                       )
@@ -650,4 +452,237 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget lastItemVideos({index, myObject}) => AnimationConfiguration.staggeredList(
+        position: index,
+        duration: const Duration(milliseconds: 1500),
+        child: SlideAnimation(
+          horizontalOffset: 40.0,
+          child: Container(
+            width: 230,
+            margin: EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: GestureDetector(
+                onTap: () {
+                  MyVideosList _videoList = MyVideosList();
+                  _videoList.path = myObject.videosList[index].path;
+                  _videoList.description = myObject.videosList[index].description;
+                  _videoList.title = myObject.videosList[index].title;
+                  _videoList.id = myObject.videosList[index].id;
+                  _videoList.classSubjectId = myObject.videosList[index].classSubjectId;
+                  _videoList.classSubject = myObject.videosList[index].classSubject;
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fadeIn,
+                          alignment: Alignment.center,
+                          duration: Duration(milliseconds: 400),
+                          child: YoutubeDetails(
+                            youtubeFiles: _videoList,
+                          )));
+                },
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      top: -25,
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: YoutubePlayer(
+                        progressIndicatorColor: Colors.blueAccent,
+                        controller: YoutubePlayerController(
+                          flags: YoutubePlayerFlags(enableCaption: false, autoPlay: false, hideControls: true, mute: true, disableDragSeek: true, controlsVisibleAtStart: false),
+                          initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: new BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                            gradient: LinearGradient(colors: [Colors.black, Colors.transparent, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 7),
+                              child: Chip(
+                                backgroundColor: Colors.green[100],
+                                label: Text("${myObject.videosList[index].classSubject}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    )),
+                                padding: EdgeInsets.all(7),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10, left: 15, right: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 230,
+                                    child: Text(
+                                      "${myObject.videosList[index].title}  ",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 230,
+                                    child: Text(
+                                      "${myObject.videosList[index].description} ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget myFirstItem(index, myObject) => Container(
+        width: 230,
+        margin: EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: GestureDetector(
+            onTap: () {
+              MyVideosList _videoList = MyVideosList();
+              _videoList.path = myObject.videosList[index].path;
+              _videoList.description = myObject.videosList[index].description;
+              _videoList.title = myObject.videosList[index].title;
+              _videoList.id = myObject.videosList[index].id;
+              _videoList.classSubjectId = myObject.videosList[index].classSubjectId;
+              _videoList.classSubject = myObject.videosList[index].classSubject;
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fadeIn,
+                      alignment: Alignment.center,
+                      duration: Duration(milliseconds: 400),
+                      child: YoutubeDetails(
+                        youtubeFiles: _videoList,
+                      )));
+            },
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: -25,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: YoutubePlayer(
+                    progressIndicatorColor: Colors.blueAccent,
+                    controller: YoutubePlayerController(
+                      flags: YoutubePlayerFlags(enableCaption: false, autoPlay: false, hideControls: true, mute: true, disableDragSeek: true, controlsVisibleAtStart: false),
+                      initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: new BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                        gradient: LinearGradient(colors: [Colors.black, Colors.transparent, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 7),
+                          child: Chip(
+                            backgroundColor: Colors.green[100],
+                            label: Text("${myObject.videosList[index].classSubject}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                )),
+                            padding: EdgeInsets.all(7),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10, left: 15, right: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                width: 230,
+                                child: Text(
+                                  "${myObject.videosList[index].title}  ",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
+                              Container(
+                                width: 230,
+                                child: Text(
+                                  "${myObject.videosList[index].description} ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
 }
