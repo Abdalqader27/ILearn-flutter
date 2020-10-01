@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Helper/Resourse/Resource.dart';
-import 'package:ilearn/View/SplashScreen/SplashScreen.dart';
+import 'Helper/Resourse/project_resources.dart';
 import 'package:provider/provider.dart';
 
-import 'Helper/Constants/myFonts.dart';
-import 'View/SplashScreen/SplashScreenProvider.dart';
+import 'View/splash_screen/splash_screen.dart';
+import 'View/splash_screen/splash_screen_provider.dart';
 
 void main() async => {
       /// we ensure if the widget is init
@@ -16,13 +15,10 @@ void main() async => {
             /// this first screen
             Provider<SplashScreenProvider>(create: (_) => SplashScreenProvider()),
 
-            /// this Fragment Controller
-            // Provider<MyAppProvider>(create: (_) => MyAppProvider()),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-
-            /// in resource class to get Styles
+            /// in resource  packages class to get Styles
             theme: myThemeData(),
             home: SplashScreen(),
           )))

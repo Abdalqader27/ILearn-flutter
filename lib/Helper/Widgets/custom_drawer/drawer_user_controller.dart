@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ilearn/Helper/Themes/appTheme.dart';
+import 'package:ilearn/Helper/Constants/constants_colors.dart';
 
 import 'home_drawer.dart';
 
@@ -91,14 +91,11 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.white,
+      backgroundColor: white,
       body: SingleChildScrollView(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
         physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
-        // scrolloffset == 1.0
-        //     ? PageScrollPhysics(parent: ClampingScrollPhysics())
-        //     : PageScrollPhysics(parent: NeverScrollableScrollPhysics()),
         child: Opacity(
           opacity: isSetDawer ? 1 : 0,
           child: SizedBox(
@@ -137,9 +134,9 @@ class _DrawerUserControllerState extends State<DrawerUserController> with Ticker
                   height: MediaQuery.of(context).size.height,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
+                      color: white,
                       boxShadow: <BoxShadow>[
-                        BoxShadow(color: AppTheme.grey.withOpacity(0.6), blurRadius: 24),
+                        BoxShadow(color: grey.withOpacity(0.6), blurRadius: 24),
                       ],
                     ),
                     child: Stack(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ilearn/Helper/Constants/constantsColors.dart';
-import 'package:ilearn/Helper/Themes/appTheme.dart';
+import 'package:ilearn/Helper/Constants/constants_assets_files.dart';
+import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Helper/Constants/constants_fonts.dart';
+import 'package:ilearn/Helper/Constants/constants_lotti_files.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeDrawer extends StatefulWidget {
@@ -27,14 +29,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
     drawerList = <DrawerList>[
       DrawerList(
         index: DrawerIndex.HOME,
-        labelName: 'الريسية',
+        labelName: 'الرئيسية',
         icon: Icon(Icons.home),
       ),
       DrawerList(
         index: DrawerIndex.Help,
         labelName: 'المساعدة',
         isAssetsImage: true,
-        imageName: 'assets/images/supportIcon.png',
+        imageName: AssetsApp.supportIcon,
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
@@ -62,7 +64,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.notWhite.withOpacity(0.5),
+      backgroundColor: notWhite.withOpacity(0.5),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -95,7 +97,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             ),
                             child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(60.0)),
-                              child: Lottie.asset('lotti_files/27637-welcome.json'),
+                              child: Lottie.asset(welcome_lotti),
                             ),
                           ),
                         ),
@@ -108,7 +110,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'عبد القادر النجار',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.grey,
+                        color: grey,
                         fontSize: 18,
                       ),
                     ),
@@ -122,7 +124,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color: AppTheme.grey.withOpacity(0.6),
+            color: grey.withOpacity(0.6),
           ),
           Expanded(
             child: ListView.builder(
@@ -136,7 +138,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Divider(
             height: 1,
-            color: AppTheme.grey.withOpacity(0.6),
+            color: grey.withOpacity(0.6),
           ),
           Column(
             children: <Widget>[
@@ -144,10 +146,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 title: Text(
                   'تسجيل الخروج',
                   style: TextStyle(
-                    fontFamily: AppTheme.fontName,
+                    fontFamily: sstArabic,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: AppTheme.darkText,
+                    color: darkText,
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -174,7 +176,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         splashColor: Colors.grey.withOpacity(0.1),
         highlightColor: Colors.transparent,
         onTap: () {
-          navigationtoScreen(listData.index);
+          navigationToScreen(listData.index);
         },
         child: Stack(
           children: <Widget>[
@@ -185,17 +187,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Container(
                     width: 6.0,
                     height: 46.0,
-                    // decoration: BoxDecoration(
-                    //   color: widget.screenIndex == listData.index
-                    //       ? Colors.blue
-                    //       : Colors.transparent,
-                    //   borderRadius: new BorderRadius.only(
-                    //     topLeft: Radius.circular(0),
-                    //     topRight: Radius.circular(16),
-                    //     bottomLeft: Radius.circular(0),
-                    //     bottomRight: Radius.circular(16),
-                    //   ),
-                    // ),
                   ),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
@@ -204,9 +195,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ? Container(
                           width: 24,
                           height: 24,
-                          child: Image.asset(listData.imageName, color: widget.screenIndex == listData.index ? Colors.blue : AppTheme.nearlyBlack),
+                          child: Image.asset(listData.imageName, color: widget.screenIndex == listData.index ? Colors.blue : nearlyBlack),
                         )
-                      : Icon(listData.icon.icon, color: widget.screenIndex == listData.index ? Colors.blue : AppTheme.nearlyBlack),
+                      : Icon(listData.icon.icon, color: widget.screenIndex == listData.index ? Colors.blue :nearlyBlack),
                   const Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
@@ -215,7 +206,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
-                      color: widget.screenIndex == listData.index ? Colors.blue : AppTheme.nearlyBlack,
+                      color: widget.screenIndex == listData.index ? Colors.blue : nearlyBlack,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -254,7 +245,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
     );
   }
 
-  Future<void> navigationtoScreen(DrawerIndex indexScreen) async {
+  Future<void> navigationToScreen(DrawerIndex indexScreen) async {
     widget.callBackIndex(indexScreen);
   }
 }
