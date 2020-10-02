@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,7 +8,7 @@ import 'package:ilearn/Helper/Widgets/background/primary_background.dart';
 import 'package:ilearn/Helper/Widgets/custom_items/loading.dart';
 import 'package:ilearn/Models/my_news.dart';
 import 'package:ilearn/Models/popularbook_model.dart';
-import 'package:intl/intl.dart'as intl;
+import 'package:intl/intl.dart' as intl;
 
 import 'news_screen_details.dart';
 
@@ -69,9 +70,12 @@ class _NewsScreenState extends State<NewsScreen> {
                                         child: Container(
                                           height: 81,
                                           width: 62,
-                                          child: Image.network(
-                                            "$BASE" + snapshot.data[index].imageUrl,
-                                            fit: BoxFit.fitHeight,
+                                          child: Hero(
+                                            tag: BASE + snapshot.data[index].imageUrl,
+                                            child: CachedNetworkImage(
+                                              imageUrl: BASE + snapshot.data[index].imageUrl,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: kMainColor),
                                         ),

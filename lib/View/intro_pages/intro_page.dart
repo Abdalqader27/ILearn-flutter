@@ -55,15 +55,11 @@ class _IntroPageState extends State<IntroPage> {
           ),
           FlatButton(
             onPressed: () {
-              if (initialPage < list.length)
-                _controller.animateToPage(list.length, duration: Duration(microseconds: 500), curve: Curves.easeInOut);
-              else {
+              {
                 Navigator.of(context).pop();
-
-                Navigator.pushAndRemoveUntil(
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => WelcomeScreen()),
-                  ModalRoute.withName('/'),
                 );
               }
             },

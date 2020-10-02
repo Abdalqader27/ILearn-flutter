@@ -11,4 +11,3 @@ class DrawerNavigation {
   dispose() => _drawerNavigation.close();
 }
 
-final drawerNavigation = DrawerNavigation();

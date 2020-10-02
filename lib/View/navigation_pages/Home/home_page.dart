@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
@@ -397,9 +398,12 @@ class _HomePageState extends State<HomePage> {
                                         child: Container(
                                           height: 81,
                                           width: 62,
-                                          child: Image.network(
-                                            "$BASE" + snapshot.data[index].imageUrl,
-                                            fit: BoxFit.fitHeight,
+                                          child: Hero(
+                                            tag: BASE + snapshot.data[index].imageUrl,
+                                            child: CachedNetworkImage(
+                                              imageUrl: BASE + snapshot.data[index].imageUrl,
+                                              fit: BoxFit.fitHeight,
+                                            ),
                                           ),
                                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: kMainColor),
                                         ),
@@ -478,7 +482,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          type: PageTransitionType.fadeIn,
+                          type: PageTransitionType.slideDown,
                           alignment: Alignment.center,
                           duration: Duration(milliseconds: 400),
                           child: YoutubeDetails(

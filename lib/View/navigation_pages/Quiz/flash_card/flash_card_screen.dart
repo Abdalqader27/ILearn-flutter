@@ -4,10 +4,12 @@ import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Helper/Constants/constants_objects.dart';
 import 'package:ilearn/Helper/Widgets/components/title_text.dart';
+import 'package:ilearn/Helper/Widgets/custom_items/loading.dart';
+import 'package:ilearn/Models/my_flash_card.dart';
 import 'flash_card_details_screen.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/Helper/Resourse/hexa_color.dart';
-
 
 class FlashCard extends StatefulWidget {
   @override
@@ -15,37 +17,58 @@ class FlashCard extends StatefulWidget {
 }
 
 class _FlashCardState extends State<FlashCard> {
+  Future myFlashCard;
+
+  @override
+  void initState() => {myFlashCard = api.getMyFlashCard(), super.initState()};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.only(left: 17.0, right: 17),
-        child: AnimationLimiter(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            itemCount: 9,
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: ScaleAnimation(
-                    child: _item(index, context),
-                  ));
-            },
-          ),
-        ),
+        child: FutureBuilder<List<MyFlashCard>>(
+            future: myFlashCard,
+            builder: (context, snapshot) {
+              if (snapshot.data == null)
+                return Center(child: Loading());
+              else {
+                List<MyFlashCard> myFlashCard = snapshot.data.where((element) => element.classId == 3).toList();
+                return AnimationLimiter(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: myFlashCard.length,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: ScaleAnimation(
+                            child: _item(index, context, myFlashCard),
+                          ));
+                    },
+                  ),
+                );
+              }
+            }),
       ),
     );
   }
 
-  Widget _item(index, BuildContext context) {
+  Widget _item(index, BuildContext context, List<MyFlashCard> myFlashCard) {
     /// listCode is table form allCodes but ..where the univesity and material
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, PageTransition(type: PageTransitionType.rippleMiddle, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: FlashCardDetails()));
+            context,
+            PageTransition(
+                type: PageTransitionType.rippleMiddle,
+                alignment: Alignment.center,
+                duration: Duration(milliseconds: 400),
+                child: FlashCardDetails(
+                  cardsList: myFlashCard[index],
+                )));
       },
       child: Container(
         height: 80,
@@ -97,7 +120,7 @@ class _FlashCardState extends State<FlashCard> {
                       title: Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: TitleText(
-                          text: "الفيزياء",
+                          text: "${myFlashCard[index].subjectName}",
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -110,7 +133,7 @@ class _FlashCardState extends State<FlashCard> {
                             fontSize: 13,
                           ),
                           TitleText(
-                            text: "19",
+                            text: "${myFlashCard[index].cardsList.length}",
                             fontSize: 13,
                           ),
                         ],

@@ -74,6 +74,8 @@ dependencies:
   cupertino_date_textbox: ^1.0.0+3
   rxdart: any
   youtube_player_flutter: ^7.0.0+7
+  cached_network_image: ^2.3.2+1
+  photo_view: ^0.9.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

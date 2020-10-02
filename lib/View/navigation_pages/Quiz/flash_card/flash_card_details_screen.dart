@@ -1,34 +1,49 @@
+import 'dart:math';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Helper/Constants/constants_objects.dart';
 import 'package:ilearn/Helper/Widgets/background/primary_background.dart';
+import 'package:ilearn/Models/my_flash_card.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/Helper/Widgets/clipper/bottom_curve_painter.dart';
 import 'package:worm_indicator/shape.dart';
-import 'package:worm_indicator/worm_indicator.dart';
 
 class FlashCardDetails extends StatefulWidget {
+  final MyFlashCard cardsList;
+
+  const FlashCardDetails({Key key, this.cardsList}) : super(key: key);
+
   @override
   _FlashCardDetailsState createState() => _FlashCardDetailsState();
 }
 
 class _FlashCardDetailsState extends State<FlashCardDetails> {
   PageController _controller;
+  int maxi=0;
 
   @override
   void initState() {
     super.initState();
     _controller = PageController(viewportFraction: 0.85, keepPage: true);
+    widget.cardsList.cardsList= widget.cardsList.cardsList.reversed.toList();
+    myFlashCard.changeObject(0);
+
   }
 
   Widget buildPageView() {
     return PageView.builder(
       pageSnapping: true,
+      reverse: true,
       dragStartBehavior: DragStartBehavior.down,
+
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
-      itemCount: 30,
+      itemCount: widget.cardsList.cardsList.length,
+      onPageChanged: (index) =>
+          myFlashCard.changeObject(index),
       itemBuilder: (BuildContext context, int pos) {
         return SizedBox(
           width: 300,
@@ -43,16 +58,19 @@ class _FlashCardDetailsState extends State<FlashCardDetails> {
                 height: 300,
                 child: Center(
                     child: Text(
-                  'من وظائف القشرة المخية ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )),
+                      '${widget.cardsList.cardsList[pos].title}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )),
               ),
             ),
             back: Card(
               elevation: 3,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Container(
-                child: Center(child: Text('Back')),
+                child: Center(
+                    child: Text(
+                      '${widget.cardsList.cardsList[pos].description}',
+                    )),
               ),
             ),
           ),
@@ -137,30 +155,46 @@ class _FlashCardDetailsState extends State<FlashCardDetails> {
                           ListTile(
                             leading: Icon(Icons.book),
                             title: Text(
-                              "المادة : فيزياء  ",
+                              "المادة : " + widget.cardsList.subjectName,
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
-                              "العدد 30 ",
+                              "العدد ${widget.cardsList.cardsList.length} ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Divider(),
-                          ListTile(
-                            title: Text(
-                              "المقروء  ",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              " 12 ",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                          StreamBuilder<int>(
+                            stream: myFlashCard.observableObject,
+                            builder: (context, snapshot) {
+                              if(snapshot.data==null)return Container();
+                              else{
+                                maxi=max(maxi,snapshot.data);
+                                return ListTile(
+                                  title: Text(
+                                    "المقروء  ",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    maxi.toString(),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                );
+
+                              }
+                            }
                           ),
                           Divider(),
                           Center(
-                            child: Text(
-                              "رقم الكارد : 10 ",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            child: StreamBuilder<int>(
+                                stream: myFlashCard.observableObject,
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null) return Container();
+                                  return Text(
+                                    "رقم الكارد:  " + (snapshot.data + 1).toString(),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  );
+                                }
                             ),
                           ),
                         ],
@@ -168,7 +202,11 @@ class _FlashCardDetailsState extends State<FlashCardDetails> {
                     ),
                   )),
 
-              Positioned(top: 250, left: 0, bottom: 25, right: 0, child: buildPageView()),
+              Positioned(top: 250,
+                  left: 0,
+                  bottom: 25,
+                  right: 0,
+                  child: buildPageView()),
               // buildExampleIndicatorWithShapeAndBottomPos(circleShape, 20),
               Opacity(
                 opacity: 0.1,

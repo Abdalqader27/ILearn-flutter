@@ -29,13 +29,13 @@ class ComingSoon extends StatelessWidget {
                 child: Center(
                     child: Text(
                       "قريباً ",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: size.height * 0.03),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     )),
               ),
               Center(
                   child: Text(
                     "قيد التطوير سوف يتم التحديث تطبيق عند الأنتهاء  ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ))
             ],
           ),

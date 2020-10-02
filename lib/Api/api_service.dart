@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:ilearn/Helper/Constants/constants_keys.dart';
+import 'package:ilearn/Models/my_flash_card.dart';
 import 'package:ilearn/Models/my_lasts_documents.dart';
 import 'package:ilearn/Models/my_lasts_youtube_video.dart';
 import 'package:ilearn/Models/my_news.dart';
@@ -49,6 +50,17 @@ class ApiServices with Api {
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return List<MyLastsDocuments>.from(json.decode(response.body).map((x) => MyLastsDocuments.fromJson(x)));
+    }
+    return null;
+  }
+
+  @override
+  Future<List<MyFlashCard>> getMyFlashCard() async{
+    var url = '${BASE_API}GetFlashCards';
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return List<MyFlashCard>.from(json.decode(response.body).map((x) => MyFlashCard.fromJson(x)));
     }
     return null;
   }

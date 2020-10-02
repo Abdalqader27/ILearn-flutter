@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
 import 'package:ilearn/Helper/Widgets/background/welcome_background.dart';
 import 'package:ilearn/Helper/Widgets/components/rounded_button.dart';
 import 'package:ilearn/View/Register/Login/login_screen.dart';
 import 'package:ilearn/View/register/sign_up/signup_screen.dart';
 import 'package:lottie/lottie.dart';
-
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -38,14 +38,8 @@ class WelcomeScreen extends StatelessWidget {
               RoundedButton(
                 text: "تسجيل الدخول ",
                 press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return LoginScreen();
-                      },
-                    ),
-                  );
+                  Navigator.push(context, PageTransition(type: PageTransitionType.rippleMiddle, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: LoginScreen()));
+
                 },
               ),
               RoundedButton(
@@ -53,14 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                 color: kPrimaryLightColor,
                 textColor: Colors.black,
                 press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SignUpScreen();
-                      },
-                    ),
-                  );
+                  Navigator.push(context, PageTransition(type: PageTransitionType.rippleMiddle, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: SignUpScreen()));
                 },
               ),
             ],
