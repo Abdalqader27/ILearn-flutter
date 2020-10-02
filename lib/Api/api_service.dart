@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:ilearn/Helper/Constants/constants_keys.dart';
+import 'package:ilearn/Models/my_document_files.dart';
 import 'package:ilearn/Models/my_flash_card.dart';
 import 'package:ilearn/Models/my_lasts_documents.dart';
 import 'package:ilearn/Models/my_lasts_youtube_video.dart';
@@ -55,12 +56,23 @@ class ApiServices with Api {
   }
 
   @override
-  Future<List<MyFlashCard>> getMyFlashCard() async{
+  Future<List<MyFlashCard>> getMyFlashCard() async {
     var url = '${BASE_API}GetFlashCards';
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return List<MyFlashCard>.from(json.decode(response.body).map((x) => MyFlashCard.fromJson(x)));
+    }
+    return null;
+  }
+
+  @override
+  Future<List<MyDocumentFiles>> getAllDocumentFiles() async {
+    var url = '${BASE_API}GetDocuments';
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return List<MyDocumentFiles>.from(json.decode(response.body).map((x) => MyDocumentFiles.fromJson(x)));
     }
     return null;
   }

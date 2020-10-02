@@ -8,7 +8,6 @@ import 'View/splash_screen/splash_screen_provider.dart';
 void main() async => {
       /// we ensure if the widget is init
       WidgetsFlutterBinding.ensureInitialized(),
-
       /// to support all widget and see provider class
       runApp(MultiProvider(
           providers: [

@@ -1,3 +1,4 @@
+import 'package:ilearn/Models/my_document_files.dart';
 import 'package:ilearn/Models/my_flash_card.dart';
 import 'package:ilearn/Models/my_lasts_documents.dart';
 import 'package:ilearn/Models/my_lasts_youtube_video.dart';
@@ -14,4 +15,6 @@ mixin Api {
   Future<List<MyLastsDocuments>> getMyLastsDocuments(count);
 
   Future<List<MyFlashCard>> getMyFlashCard();
+
+  Future<List<MyDocumentFiles>> getAllDocumentFiles();
 }
