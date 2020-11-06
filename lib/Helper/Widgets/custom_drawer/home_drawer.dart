@@ -222,7 +222,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         child: Padding(
                           padding: EdgeInsets.only(top: 8, bottom: 8),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 0.75 - 64,
+                            width: MediaQuery.of(context).size.width * 0.75 ,
                             height: 46,
                             decoration: BoxDecoration(
                               color: Colors.blue.withOpacity(0.2),

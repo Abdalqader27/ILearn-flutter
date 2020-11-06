@@ -15,7 +15,6 @@ class About extends StatefulWidget {
 
 class AboutState extends State<About> {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Directionality(

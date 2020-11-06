@@ -52,9 +52,9 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
             onDrawerCall: (DrawerIndex drawerIndexData) {
               if (drawerIndex != drawerIndexData) {
                 drawerIndex = drawerIndexData;
-                setState(() {
+                // setState(() {
                   drawerNavigation.changeObject(drawerIndexData);
-                });
+                // });
               }
             },
             screenView: StreamBuilder(

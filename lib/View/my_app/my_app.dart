@@ -112,22 +112,22 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white,
           items: [
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData('home'),
+              icon: AntDesign.home,
             ),
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData('folderopen'),
+              icon: AntDesign.folderopen,
             ),
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData("playcircleo"),
+              icon: AntDesign.playcircleo,
             ),
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData('book'),
+              icon: AntDesign.book,
             ),
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData("barchart"),
+              icon: AntDesign.barchart,
             ),
             CustomNavigationBarItem(
-              icon: AntDesign.getIconData("user"),
+              icon: AntDesign.user,
             ),
           ],
           currentIndex: snapshot.data,

@@ -7,7 +7,7 @@ import 'package:ilearn/Helper/Constants/constants_keys.dart';
 import 'package:ilearn/Models/my_lasts_documents.dart';
 
 class PdfReaderPage extends StatefulWidget {
-  final FilesList file;
+  final  file;
 
   PdfReaderPage(this.file);
 

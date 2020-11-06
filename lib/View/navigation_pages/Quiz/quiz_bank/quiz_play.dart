@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Models/bank_question_module.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/Helper/Widgets/custom_items/quiz_play_widgets.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/Helper/Widgets/components/circular_button.dart';
 import 'package:ilearn/Models/question_model.dart';
 
 class QuizPlay extends StatefulWidget {
-  QuizPlay();
+  final QuestionBankModule item;
+  final int myIndex;
+
+  const QuizPlay({Key key, this.item, this.myIndex}) : super(key: key);
 
   @override
   _QuizPlayState createState() => _QuizPlayState();
@@ -30,7 +34,6 @@ class _QuizPlayState extends State<QuizPlay> with SingleTickerProviderStateMixin
   void initState() {
     if (infoStream == null) {
       infoStream = Stream<List<int>>.periodic(Duration(milliseconds: 100), (x) {
-        print("this is x $x");
         return [_correct, _incorrect];
       });
     }
@@ -78,7 +81,7 @@ class _QuizPlayState extends State<QuizPlay> with SingleTickerProviderStateMixin
         title: Container(
           width: double.maxFinite,
           child: Text(
-            "الفيزياء ",
+            "${widget.item.classSubjectName} ",
             textDirection: TextDirection.rtl,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
@@ -113,7 +116,7 @@ class _QuizPlayState extends State<QuizPlay> with SingleTickerProviderStateMixin
                             height: 2,
                           ),
                           Text(
-                            "دورة 2019  ",
+                            "${widget.item.subjectExamsList[widget.myIndex].subjectExamName}",
                             textDirection: TextDirection.rtl,
                             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17),
                           ),
@@ -178,19 +181,20 @@ class _QuizPlayState extends State<QuizPlay> with SingleTickerProviderStateMixin
                     height: 20,
                   ),
                   ListView.builder(
-                      itemCount: 4,
+                      itemCount: widget.item.subjectExamsList[widget.myIndex].examQuestionsList.length,
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return QuizPlayTile(
                           questionModel: QuestionModel(
-                              question: "يقع الدماغ المتوسط في :  ",
-                              option1: "خلف البصلة السيسائية ",
-                              option2: "تحت مثلث المخ ",
-                              option3: "بجانب الوطاء ",
-                              option4: "أسفل المهادين ",
-                              answered: false,
-                              correctOption: "option1"),
+                            question: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].question} ",
+                            option1: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].option1} ",
+                            option2: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].option2} ",
+                            option3: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].option3} ",
+                            option4: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].option4} ",
+                            answered: false,
+                            correctOption: "${widget.item.subjectExamsList[widget.myIndex].examQuestionsList[index].correctAnswer} ",
+                          ),
                           index: index,
                         );
                       })
@@ -198,7 +202,6 @@ class _QuizPlayState extends State<QuizPlay> with SingleTickerProviderStateMixin
               ),
             ),
           ),
-
           Positioned(
               left: 30,
               bottom: 30,
@@ -380,16 +383,16 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     onTap: () {
                       if (!widget.questionModel.answered) {
                         ///correct
-                        if (widget.questionModel.option1 == widget.questionModel.correctOption) {
+                        if ("1" == widget.questionModel.correctOption.trim()) {
                           setState(() {
-                            optionSelected = widget.questionModel.option1;
+                            optionSelected="1";
                             widget.questionModel.answered = true;
                             _correct = _correct + 1;
                             _notAttempted = _notAttempted + 1;
                           });
                         } else {
                           setState(() {
-                            optionSelected = widget.questionModel.option1;
+                            optionSelected="1";
                             widget.questionModel.answered = true;
                             _incorrect = _incorrect + 1;
                             _notAttempted = _notAttempted - 1;
@@ -409,18 +412,20 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      print(optionSelected);
                       if (!widget.questionModel.answered) {
                         ///correct
-                        if (widget.questionModel.option2 == widget.questionModel.correctOption) {
+                        if ("2"== widget.questionModel.correctOption.trim()) {
                           setState(() {
-                            optionSelected = widget.questionModel.option2;
+                            //optionSelected = widget.questionModel.option2;
+                            optionSelected="2";
                             widget.questionModel.answered = true;
                             _correct = _correct + 1;
                             _notAttempted = _notAttempted + 1;
                           });
                         } else {
                           setState(() {
-                            optionSelected = widget.questionModel.option2;
+                            optionSelected="2";
                             widget.questionModel.answered = true;
                             _incorrect = _incorrect + 1;
                             _notAttempted = _notAttempted - 1;
@@ -442,16 +447,16 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     onTap: () {
                       if (!widget.questionModel.answered) {
                         ///correct
-                        if (widget.questionModel.option3 == widget.questionModel.correctOption) {
+                        if ("3" == widget.questionModel.correctOption.trim()) {
                           setState(() {
-                            optionSelected = widget.questionModel.option3;
+                            optionSelected="3";
                             widget.questionModel.answered = true;
                             _correct = _correct + 1;
                             _notAttempted = _notAttempted + 1;
                           });
                         } else {
                           setState(() {
-                            optionSelected = widget.questionModel.option3;
+                            optionSelected="3";
                             widget.questionModel.answered = true;
                             _incorrect = _incorrect + 1;
                             _notAttempted = _notAttempted - 1;
@@ -473,16 +478,16 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     onTap: () {
                       if (!widget.questionModel.answered) {
                         ///correct
-                        if (widget.questionModel.option4 == widget.questionModel.correctOption) {
+                        if ("4" == widget.questionModel.correctOption.trim()) {
                           setState(() {
-                            optionSelected = widget.questionModel.option4;
+                            optionSelected="4";
                             widget.questionModel.answered = true;
                             _correct = _correct + 1;
                             _notAttempted = _notAttempted + 1;
                           });
                         } else {
                           setState(() {
-                            optionSelected = widget.questionModel.option4;
+                            optionSelected="4";
                             widget.questionModel.answered = true;
                             _incorrect = _incorrect + 1;
                             _notAttempted = _notAttempted - 1;
@@ -509,6 +514,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
     );
   }
 }
+
 double getRadiansFromDegree(double degree) {
   double unitRadian = 57.295779513;
   return degree / unitRadian;

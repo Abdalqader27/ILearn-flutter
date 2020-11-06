@@ -20,7 +20,7 @@ class _FlashCardState extends State<FlashCard> {
   Future myFlashCard;
 
   @override
-  void initState() => {myFlashCard = api.getMyFlashCard(), super.initState()};
+  void initState() => {myFlashCard = api.getMyFlashCard(3), super.initState()};
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,7 @@ class _FlashCardState extends State<FlashCard> {
                 return Center(child: Loading());
               else {
                 List<MyFlashCard> myFlashCard = snapshot.data.where((element) => element.classId == 3).toList();
+                if(myFlashCard.isEmpty)return Center(child: Text("لايوجد",style: TextStyle(fontWeight: FontWeight.bold)));
                 return AnimationLimiter(
                   child: ListView.builder(
                     shrinkWrap: true,

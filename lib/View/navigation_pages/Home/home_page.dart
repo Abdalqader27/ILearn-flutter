@@ -25,6 +25,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'Search/search_screen.dart';
 import 'news/news_screen.dart';
+import 'dart:developer' as developer;
 import 'news/news_screen_details.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -161,99 +162,107 @@ class _HomePageState extends State<HomePage> {
                   height: MediaQuery.of(context).size.height / 4.5,
                   child: StreamBuilder<int>(
                       stream: choiceFilesOrVideo.observableObject,
-                      builder: (context, snapshot) {
-                        if (snapshot.data == 0)
+                      builder: (context, data) {
+                        if (data.data == 0)
                           return Container(
                             child: FutureBuilder<List<MyLastsDocuments>>(
                                 future: myLastsDocumentFuture,
                                 builder: (context, snapshot) {
-                                  if (snapshot.data == null)
-                                    return Loading();
+                                  if (snapshot.data == null) return Loading();
+                                  if (snapshot.data.length == 0)
+                                    return Text("لايوجد");
                                   else {
-                                    MyLastsDocuments myObject = snapshot.data.firstWhere((element) => element.classId == 3);
+
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
-                                      child: Center(
-                                        child: AnimationLimiter(
-                                          child: ListView.builder(
-                                              padding: EdgeInsets.only(left: 5, right: 6, bottom: 0),
-                                              itemCount: myObject.filesList.length,
-                                              physics: BouncingScrollPhysics(),
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfReaderPage(myObject.filesList[index])));
-                                                  },
-                                                  child: AnimationConfiguration.staggeredList(
-                                                    position: index,
-                                                    duration: const Duration(milliseconds: 1500),
-                                                    child: SlideAnimation(
-                                                      horizontalOffset: 20,
-                                                      child: Card(
-                                                        color: Colors.transparent,
-                                                        elevation: 0,
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                                                        child: Container(
-                                                          margin: EdgeInsets.only(right: 0, top: 5),
-                                                          width: 105,
-                                                          child: Column(
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                                                child: Text(
-                                                                  '${myObject.filesList[index].fileName}',
-                                                                  softWrap: true,
-                                                                  overflow: TextOverflow.ellipsis,
-                                                                  maxLines: 1,
-                                                                  style: TextStyle(color: Colors.grey),
+                                      child: AnimationLimiter(
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data.length,
+                                          itemBuilder: (context,parentIndex){
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                                padding: EdgeInsets.only(left: 5, right: 6, bottom: 0),
+                                                itemCount: snapshot.data[parentIndex].filesList.length,
+                                                physics: BouncingScrollPhysics(),
+                                                scrollDirection: Axis.horizontal,
+                                                itemBuilder: (context, index) {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfReaderPage(snapshot.data[parentIndex].filesList[index])));
+                                                    },
+                                                    child: AnimationConfiguration.staggeredList(
+                                                      position: index,
+                                                      duration: const Duration(milliseconds: 1500),
+                                                      child: SlideAnimation(
+                                                        horizontalOffset: 20,
+                                                        child: Card(
+                                                          color: Colors.transparent,
+                                                          elevation: 0,
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                                          child: Container(
+                                                            margin: EdgeInsets.only(right: 0, top: 5),
+                                                            width: 105,
+                                                            child: Column(
+                                                              children: <Widget>[
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                                                                  child: Text(
+                                                                    '${snapshot.data[parentIndex].filesList[index].fileName}',
+                                                                    softWrap: true,
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                    maxLines: 1,
+                                                                    style: TextStyle(color: Colors.grey),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                child: Stack(
-                                                                  children: <Widget>[
-                                                                    Positioned(
-                                                                      left: 0,
-                                                                      right: 0,
-                                                                      child: Container(
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
-                                                                          child: Container(
-                                                                            decoration:
-                                                                                BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16.0)), color: Colors.grey[400].withOpacity(.1)),
-                                                                            child: ClipRRect(
-                                                                              borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                                                                              child: AspectRatio(
-                                                                                  aspectRatio: 0.8,
-                                                                                  child: Column(
-                                                                                    children: <Widget>[
-                                                                                      Expanded(
-                                                                                        child: Padding(
-                                                                                          padding: const EdgeInsets.all(0.0),
-                                                                                          child: SvgPicture.asset(
-                                                                                            "SvgFiles/pdf3.svg",
-                                                                                            width: 60,
+                                                                Expanded(
+                                                                  child: Stack(
+                                                                    children: <Widget>[
+                                                                      Positioned(
+                                                                        left: 0,
+                                                                        right: 0,
+                                                                        child: Container(
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
+                                                                            child: Container(
+                                                                              decoration:
+                                                                              BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16.0)), color: Colors.grey[400].withOpacity(.1)),
+                                                                              child: ClipRRect(
+                                                                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                                                                child: AspectRatio(
+                                                                                    aspectRatio: 0.8,
+                                                                                    child: Column(
+                                                                                      children: <Widget>[
+                                                                                        Expanded(
+                                                                                          child: Padding(
+                                                                                            padding: const EdgeInsets.all(0.0),
+                                                                                            child: SvgPicture.asset(
+                                                                                              "SvgFiles/pdf3.svg",
+                                                                                              width: 60,
+                                                                                            ),
                                                                                           ),
                                                                                         ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  )),
+                                                                                      ],
+                                                                                    )),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                );
-                                              }),
+                                                  );
+                                                });
+
+                                          },
                                         ),
                                       ),
                                     );
@@ -265,63 +274,84 @@ class _HomePageState extends State<HomePage> {
                             child: FutureBuilder<List<MyLastsYoutubeVideo>>(
                                 future: myVideosFuture,
                                 builder: (context, snapshot) {
-                                  if (snapshot.data == null)
-                                    return Loading();
+                                  if (snapshot.data == null) return Loading();
+                                  if (snapshot.data.length == 0)
+                                    return Center(
+                                        child: Text(
+                                      "لايوجد",
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ));
                                   else {
-                                    MyLastsYoutubeVideo myObject = snapshot.data.firstWhere((element) => element.classId == 3);
+                                    /// MyLastsYoutubeVideo myObject = snapshot.data.firstWhere((element) => element.classId == 1, orElse: () => null);
+                                    //     if (myObject == null || myObject.videosList.length == 0)
+                                    if (!snapshot.hasData)
+                                      return Center(
+                                          child: Text(
+                                        "لايوجد",
+                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                      ));
                                     return Directionality(
                                       textDirection: TextDirection.rtl,
                                       child: AnimationLimiter(
                                         child: ListView.builder(
-                                            padding: EdgeInsets.only(left: 25, right: 6, bottom: 10),
-                                            itemCount: myObject.videosList.length,
-                                            physics: BouncingScrollPhysics(),
                                             scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              if (index == myObject.videosList.length - 1)
-                                                return AnimationConfiguration.staggeredList(
-                                                  position: index,
-                                                  duration: const Duration(milliseconds: 1500),
-                                                  child: SlideAnimation(
-                                                    verticalOffset: 40.0,
-                                                    child: Row(
-                                                      children: [
-                                                        myFirstItem(index, myObject),
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(18.0),
-                                                          child: Center(
-                                                            child: Column(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                Container(
-                                                                  child: FloatingActionButton(
-                                                                    elevation: 0,
-                                                                    backgroundColor: Colors.white,
-                                                                    mini: true,
-                                                                    onPressed: () {
-                                                                      Toast.show("تم الانتقال الى صفحة الفيديوهات ", context, duration: Toast.LENGTH_LONG, backgroundColor: Colors.deepPurpleAccent);
-                                                                      myAppBottomNavigation.changeObject(2);
-                                                                    },
-                                                                    child: Center(
-                                                                        child: Icon(
-                                                                      Icons.arrow_forward,
-                                                                      color: Colors.grey,
-                                                                    )),
+                                            shrinkWrap: true,
+                                            itemCount: snapshot.data.length,
+                                            itemBuilder: (context, parentIndex) {
+                                              if (snapshot.data == null) return Loading();
+                                              return ListView.builder(
+                                                shrinkWrap: true,
+                                                  padding: EdgeInsets.only(left: 25, right: 6, bottom: 10),
+                                                  itemCount: snapshot.data[parentIndex].videosList.length,
+                                                  physics: BouncingScrollPhysics(),
+                                                  scrollDirection: Axis.horizontal,
+                                                  itemBuilder: (context, index) {
+                                                    if (index == snapshot.data[parentIndex].videosList.length - 1)
+                                                      return AnimationConfiguration.staggeredList(
+                                                        position: index,
+                                                        duration: const Duration(milliseconds: 1500),
+                                                        child: SlideAnimation(
+                                                          verticalOffset: 40.0,
+                                                          child: Row(
+                                                            children: [
+                                                              myFirstItem(index, snapshot.data[parentIndex].videosList),
+                                                              Padding(
+                                                                padding: const EdgeInsets.all(18.0),
+                                                                child: Center(
+                                                                  child: Column(
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      Container(
+                                                                        child: FloatingActionButton(
+                                                                          elevation: 0,
+                                                                          backgroundColor: Colors.white,
+                                                                          mini: true,
+                                                                          onPressed: () {
+                                                                            Toast.show("تم الانتقال الى صفحة الفيديوهات ", context,
+                                                                                duration: Toast.LENGTH_LONG, backgroundColor: Colors.deepPurpleAccent);
+                                                                            myAppBottomNavigation.changeObject(2);
+                                                                          },
+                                                                          child: Center(
+                                                                              child: Icon(
+                                                                            Icons.arrow_forward,
+                                                                            color: Colors.grey,
+                                                                          )),
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        "عرض الكل ",
+                                                                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                                                                      )
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                                Text(
-                                                                  "عرض الكل ",
-                                                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
-                                                                )
-                                                              ],
-                                                            ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              return lastItemVideos(index: index, myObject: myObject);
+                                                      );
+                                                    return lastItemVideos(index: index, videosList: snapshot.data[parentIndex].videosList);
+                                                  });
                                             }),
                                       ),
                                     );
@@ -457,7 +487,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget lastItemVideos({index, myObject}) => AnimationConfiguration.staggeredList(
+  Widget lastItemVideos({index,List<VideosList> videosList}) => AnimationConfiguration.staggeredList(
         position: index,
         duration: const Duration(milliseconds: 1500),
         child: SlideAnimation(
@@ -473,12 +503,12 @@ class _HomePageState extends State<HomePage> {
               child: GestureDetector(
                 onTap: () {
                   MyVideosList _videoList = MyVideosList();
-                  _videoList.path = myObject.videosList[index].path;
-                  _videoList.description = myObject.videosList[index].description;
-                  _videoList.title = myObject.videosList[index].title;
-                  _videoList.id = myObject.videosList[index].id;
-                  _videoList.classSubjectId = myObject.videosList[index].classSubjectId;
-                  _videoList.classSubject = myObject.videosList[index].classSubject;
+                  _videoList.path = videosList[index].path;
+                  _videoList.description = videosList[index].description;
+                  _videoList.title = videosList[index].title;
+                  _videoList.id = videosList[index].id;
+                  _videoList.classSubjectId = videosList[index].classSubjectId;
+                  _videoList.classSubject = videosList[index].classSubject;
                   Navigator.push(
                       context,
                       PageTransition(
@@ -500,7 +530,7 @@ class _HomePageState extends State<HomePage> {
                         progressIndicatorColor: Colors.blueAccent,
                         controller: YoutubePlayerController(
                           flags: YoutubePlayerFlags(enableCaption: false, autoPlay: false, hideControls: true, mute: true, disableDragSeek: true, controlsVisibleAtStart: false),
-                          initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
+                          initialVideoId: '${YoutubePlayer.convertUrlToId("${videosList[index].path}")}',
                         ),
                       ),
                     ),
@@ -523,7 +553,7 @@ class _HomePageState extends State<HomePage> {
                               padding: EdgeInsets.only(left: 7),
                               child: Chip(
                                 backgroundColor: Colors.green[100],
-                                label: Text("${myObject.videosList[index].classSubject}",
+                                label: Text("${videosList[index].classSubject}",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -540,7 +570,7 @@ class _HomePageState extends State<HomePage> {
                                   Container(
                                     width: 230,
                                     child: Text(
-                                      "${myObject.videosList[index].title}  ",
+                                      "${videosList[index].title}  ",
                                       style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
@@ -553,7 +583,7 @@ class _HomePageState extends State<HomePage> {
                                   Container(
                                     width: 230,
                                     child: Text(
-                                      "${myObject.videosList[index].description} ",
+                                      "${videosList[index].description} ",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -577,7 +607,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  Widget myFirstItem(index, myObject) => Container(
+  Widget myFirstItem(index, List<VideosList> videosList) => Container(
         width: 230,
         margin: EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
@@ -588,12 +618,12 @@ class _HomePageState extends State<HomePage> {
           child: GestureDetector(
             onTap: () {
               MyVideosList _videoList = MyVideosList();
-              _videoList.path = myObject.videosList[index].path;
-              _videoList.description = myObject.videosList[index].description;
-              _videoList.title = myObject.videosList[index].title;
-              _videoList.id = myObject.videosList[index].id;
-              _videoList.classSubjectId = myObject.videosList[index].classSubjectId;
-              _videoList.classSubject = myObject.videosList[index].classSubject;
+              _videoList.path = videosList[index].path;
+              _videoList.description = videosList[index].description;
+              _videoList.title = videosList[index].title;
+              _videoList.id = videosList[index].id;
+              _videoList.classSubjectId = videosList[index].classSubjectId;
+              _videoList.classSubject = videosList[index].classSubject;
               Navigator.push(
                   context,
                   PageTransition(
@@ -615,7 +645,7 @@ class _HomePageState extends State<HomePage> {
                     progressIndicatorColor: Colors.blueAccent,
                     controller: YoutubePlayerController(
                       flags: YoutubePlayerFlags(enableCaption: false, autoPlay: false, hideControls: true, mute: true, disableDragSeek: true, controlsVisibleAtStart: false),
-                      initialVideoId: '${YoutubePlayer.convertUrlToId("${myObject.videosList[index].path}")}',
+                      initialVideoId: '${YoutubePlayer.convertUrlToId("${videosList[index].path}")}',
                     ),
                   ),
                 ),
@@ -638,7 +668,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.only(left: 7),
                           child: Chip(
                             backgroundColor: Colors.green[100],
-                            label: Text("${myObject.videosList[index].classSubject}",
+                            label: Text("${videosList[index].classSubject}",
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -655,7 +685,7 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 width: 230,
                                 child: Text(
-                                  "${myObject.videosList[index].title}  ",
+                                  "${videosList[index].title}  ",
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
@@ -668,7 +698,7 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 width: 230,
                                 child: Text(
-                                  "${myObject.videosList[index].description} ",
+                                  "${videosList[index].description} ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,

@@ -1,11 +1,11 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
+import 'package:ilearn/Helper/Constants/constants_objects.dart';
 import 'package:ilearn/Helper/Widgets/background/primary_background.dart';
 
 import 'package:ilearn/View/intro_pages/intro_page.dart';
-
+import 'package:ilearn/View/navigation_pages/Home/navigation_home_screen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     appState.boldAppName(),
 
                     /// the text is having ( Study Smarter & Faster )
-             //       appState.textWriterAnimation(),
+                    //       appState.textWriterAnimation(),
                   ],
                 ),
               ),
@@ -89,12 +89,23 @@ class _SplashScreenState extends State<SplashScreen> {
       //     }
       //   });
       // });
-      Navigator.of(context).pop();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => IntroPage()),
-        ModalRoute.withName('/'),
-      );
+      mySharedPrefs.get("user", 0).then((value) {
+        print(value);
+        Navigator.of(context).pop();
+        if (value.toString().trim().length == 0) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => IntroPage()),
+            ModalRoute.withName('/'),
+          );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => NavigationHomeScreen()),
+            ModalRoute.withName('/'),
+          );
+        }
+      });
     });
   }
 }

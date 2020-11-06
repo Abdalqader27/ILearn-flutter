@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-mixin SharedPrefsHelper {
-  setSharedPreference({String stringValue, int intValue, bool boolValue, double doubleValue, String key, int type}) async {
+class SharedPrefsHelper {
+  setValue({String stringValue, int intValue, bool boolValue, double doubleValue, String key, int type}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (type == 0) await prefs.setString(key, stringValue);
     if (type == 1) await prefs.setBool(key, boolValue);
@@ -9,7 +9,7 @@ mixin SharedPrefsHelper {
     if (type == 3) await prefs.setInt(key, intValue);
   }
 
-  Future<dynamic> getSharedPreference(String key, int type) async {
+  Future<dynamic> get(String key, int type) async {
     SharedPreferences sPrefs = await SharedPreferences.getInstance();
     if (type == 0) return sPrefs.getString(key) ?? "";
     if (type == 1) return sPrefs.getBool(key) ?? false;

@@ -22,7 +22,6 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
   Future myFuture;
 
   /// my global List to get from it data
-  List<MyYoutubeVideo> myVideoList;
 
   @override
   void initState() => {
@@ -48,15 +47,20 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
                   'lotti_files/29435-random-things.json',
                 );
               else {
-                myVideoList = snapshot.data.where((element) => element.classId == 3).toList();
+                if (snapshot.data .isEmpty)
+                  return Center(
+                      child: Text(
+                    "لايوجد",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ));
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
-                  itemCount: myVideoList.length,
+                  itemCount: snapshot.data .length,
                   itemBuilder: (context, parentIndex) => Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      myTitle(myVideoList[parentIndex].subjectName),
+                      myTitle(snapshot.data [parentIndex].subjectName),
                       Padding(
                         padding: const EdgeInsets.only(top: 16, bottom: 16),
                         child: Column(
@@ -71,16 +75,17 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.only(left: 25, right: 6, bottom: 10),
-                                      itemCount: myVideoList[parentIndex].videosList.length,
+                                      itemCount: snapshot.data [parentIndex].videosList.length,
                                       physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) => myItem(
-                                        parentIndex: parentIndex,
+                                        snapshot: snapshot,
+                                            parentIndex: parentIndex,
                                             index: index,
-                                            title: myVideoList[parentIndex].videosList[index].title,
-                                            classSubject: myVideoList[parentIndex].videosList[index].classSubject,
-                                            description: myVideoList[parentIndex].videosList[index].description,
-                                            path: myVideoList[parentIndex].videosList[index].path,
+                                            title: snapshot.data [parentIndex].videosList[index].title,
+                                            classSubject: snapshot.data [parentIndex].videosList[index].classSubject,
+                                            description: snapshot.data [parentIndex].videosList[index].description,
+                                            path: snapshot.data [parentIndex].videosList[index].path,
                                           )),
                                 ),
                               ),
@@ -115,7 +120,7 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
         width: double.infinity,
       );
 
-  Widget myItem({index, path, classSubject, title, description,parentIndex}) => AnimationConfiguration.staggeredList(
+  Widget myItem({index, path, classSubject, title, description, parentIndex,snapshot}) => AnimationConfiguration.staggeredList(
         position: index,
         duration: const Duration(milliseconds: 1500),
         child: SlideAnimation(
@@ -130,10 +135,15 @@ class _VideoScreenState extends State<VideoScreen> with TickerProviderStateMixin
               borderRadius: BorderRadius.circular(10.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context, PageTransition(type: PageTransitionType.fadeIn, alignment: Alignment.center, duration: Duration(milliseconds: 400), child: YoutubeDetails(
-
-                    youtubeFiles:myVideoList[parentIndex].videosList[index] ,
-                  )));
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fadeIn,
+                          alignment: Alignment.center,
+                          duration: Duration(milliseconds: 400),
+                          child: YoutubeDetails(
+                            youtubeFiles: snapshot.data[parentIndex].videosList[index],
+                          )));
                 },
                 child: Stack(
                   children: <Widget>[

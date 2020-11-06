@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ilearn/Helper/Constants/constants_colors.dart';
 import 'package:ilearn/Helper/Constants/constants_fonts.dart';
+import 'package:ilearn/Helper/Widgets/components/dialog.dart';
 import 'file:///D:/_Andrid/My%20projects/ilearn/lib/Helper/Widgets/components/rounded_button.dart';
 import 'package:lottie/lottie.dart';
 
@@ -126,7 +127,7 @@ class _ExamScreenState extends State<ExamScreen> {
                       label: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          "مش تفرق ",
+                          "غير محدد ",
                           style: TextStyle(fontFamily: sstArabic, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -202,6 +203,8 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   void _startQuiz() async {
+    await showMyDialog(context);
+
     // setState(() {
     //   processing=true;
     // });

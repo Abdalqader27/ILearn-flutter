@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "688637463741",
+    "firebase_url": "https://ilearn-290914.firebaseio.com",
+    "project_id": "ilearn-290914",
+    "storage_bucket": "ilearn-290914.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688637463741:android:3c038ce7c55da83f633bd4",
+        "android_client_info": {
+          "package_name": "com.abdalqader27.ilearn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688637463741-i35rha5a924fr8sievpgdo4n1nmt6d1k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdcrMtM6gYiPJzkOVgxzXGfWayKYmXlAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688637463741-i35rha5a924fr8sievpgdo4n1nmt6d1k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

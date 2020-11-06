@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ilearn/Helper/Constants/constants_dimen.dart';
+import 'package:ilearn/Helper/Constants/constants_objects.dart';
 import 'package:ilearn/Helper/Widgets/custom_items/profile_list_item.dart';
+import 'package:ilearn/View/intro_pages/intro_page.dart';
 import 'package:ilearn/View/navigation_pages/User/personal_profile/personal_profile_screen.dart';
 import 'package:ilearn/View/navigation_pages/User/settings/settings_screen.dart';
 import 'package:ilearn/View/navigation_pages/User/task_menu/task_menu_screen.dart';
@@ -71,6 +73,14 @@ class _UserPageState extends State<UserPage> {
                 ProfileListItem(
                   icon: LineAwesomeIcons.alternate_sign_out,
                   text: 'تسجيل الخروج',
+                  onTap: () {
+                    mySharedPrefs.setValue(type: 0, stringValue: "", key: "user");
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => IntroPage()),
+                      ModalRoute.withName('/'),
+                    );
+                  },
                   hasNavigation: false,
                 ),
               ],
